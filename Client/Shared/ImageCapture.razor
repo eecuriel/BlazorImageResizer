@@ -1,0 +1,167 @@
+
+
+<h3>Select your image</h3>
+
+<p>
+    <InputFile OnChange="@OnInputFileChange"  class="form-control form-control-lg"  />
+</p>
+
+@if (imageDataUrls.Count > 0)
+{
+    <h4>Images</h4>
+    <div class="container">
+        <div class="row">
+                <div class="card col-md">
+                <div class="card-body">
+                @foreach (var imageDataUrl in imageDataUrls)
+                {
+                    <img class="rounded m-1" src="@imageDataUrl" />
+
+                    <p>Image Actual Size : @ActualSize @Measure </p>
+                }
+
+                </div>
+            </div>
+            <div class="card col-md" >
+                
+                <div class="card-body rounded m-1 input-group mb-3 form-check form-check-inline" >
+                <p>Select image size:</p>
+                <input type="radio" class="form-check-input" style="margin-left: 10px;" id="small" name="size"  @onchange="@(() => DimChange("sm"))" checked>
+                <label for="Small" class="form-check-label" >Small</label><br>
+                <input type="radio" class="form-check-input" style="margin-left: 10px;" id="medium" name="size"  @onchange="@(() => DimChange("md"))">
+                <label for="medium" class="form-check-label">Medium</label><br>
+                <input type="radio"class="form-check-input" style="margin-left: 10px;" id="large" name="size" @onchange="@(() => DimChange("lg"))">
+                <label for="large" class="form-check-label">Large</label>
+                <input type="radio" class="form-check-input" style="margin-left: 10px;" id="custom" name="size"  @onchange="@(() => DimChange("cust"))">
+                <label for="custom" class="form-check-label">Custom</label>
+                <div class="card">
+                    <div class="card-body">
+                        <p>New Size :  @NewSize @NewMeasure </p>
+
+                    </div>
+
+                </div>
+
+                @if (ActivarCampos)
+                {
+                
+                        <div class="form-group" >
+                        <input type="text" class="form-control-sm"  @bind="@Dim1"  >
+                        <label for="px" class="form-label">px</label>
+                        <input type="text" class="form-control-sm"  @bind="@Dim2" >
+                        <label for="px" class="form-label">px</label>
+                        </div>
+
+                        <button class="btn btn-primary" style="margin-left: 5px;" onClick="@PreviewImgNewSize(File,Dim1,Dim2)">Resize</button>
+                        <button class="btn btn-primary" style="margin-left: 5px;" >Preview Image</button>
+                        <button class="btn btn-primary" style="margin-left: 5px;">Download Image</button>
+                
+                }
+            </div>
+        
+        </div>
+    </div>
+
+    </div>
+
+}
+
+@code {
+
+    private IList<string> imageDataUrls = new List<string>();
+    public long ActualSize = 0;
+    public long NewSize = 0;
+    public string Measure ="" ;
+    public string NewMeasure ="" ;
+    private int mbSize = 1024;
+    public IBrowserFile File = null;
+    bool ActivarCampos = false;
+    public int Dim1  = 300;
+    public int Dim2  = 300;
+    
+
+private async Task DimChange(string Dim)
+    {
+            if (Dim == "sm")
+            {
+                Dim1 = 500;
+                Dim2 = 500;
+                ActivarCampos = false;
+                await PreviewImgNewSize(File,Dim1,Dim2);
+            }else if (Dim == "md")
+            {
+                Dim1 = 800;
+                Dim2 = 800;
+                ActivarCampos = false;
+                await PreviewImgNewSize(File,Dim1,Dim2);
+                
+
+            }else if (Dim == "lg")
+            {
+                Dim1 = 1000;
+                Dim2 = 1000;
+                ActivarCampos = false;
+                await PreviewImgNewSize(File,Dim1,Dim2);
+            }else if (Dim == "cust")
+            {
+                ActivarCampos = true;
+                await PreviewImgNewSize(File,Dim1,Dim2);
+            }
+            
+                await PreviewImgNewSize(File,Dim1,Dim2);
+
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs  e)
+    {
+        imageDataUrls.Clear();
+        var maxAllowedFiles = 1;
+        
+        File = e.File;
+        foreach (var imageFile in e.GetMultipleFiles(maxAllowedFiles))
+        {
+                if (imageFile.ContentType == "image/png" || imageFile.ContentType == "image/jpeg" || imageFile.ContentType == "image/gif" ) 
+                    {
+                    
+
+                        var resizedImageFile = await imageFile.RequestImageFileAsync(imageFile.ContentType,Dim1 , Dim2);
+                        var buffer = new byte[resizedImageFile.Size];
+                        await resizedImageFile.OpenReadStream().ReadAsync(buffer);
+                        var imageDataUrl =$"data:{imageFile.ContentType};base64,{Convert.ToBase64String(buffer)}";
+                        imageDataUrls.Add(imageDataUrl);
+                        ActualSize = imageFile.Size / mbSize;
+                        
+                        if (ActualSize >= mbSize){
+                            Measure = "MB";
+                            ActualSize = ActualSize / mbSize;
+                        }else {
+
+                            Measure = "KB";
+                        }
+                        await DimChange("sm");
+                    }      
+        }
+    }
+
+    private async Task PreviewImgNewSize(IBrowserFile  imageFile,int dim1, int dim2)
+    {
+        
+                if (imageFile.ContentType == "image/png" || imageFile.ContentType == "image/jpeg" || imageFile.ContentType == "image/gif" ) 
+                    {
+                        var newresizedImageFile = await imageFile.RequestImageFileAsync(imageFile.ContentType,dim1 , dim2);
+                        var buffer = new byte[newresizedImageFile.Size];
+                        await newresizedImageFile.OpenReadStream().ReadAsync(buffer);
+                        NewSize = newresizedImageFile.Size / mbSize;
+                        
+                        if (NewSize >= mbSize){
+                            NewMeasure = "MB";
+                            NewSize = NewSize / mbSize;
+                        }else {
+
+                            NewMeasure = "KB";
+                        }
+                    }
+    }
+
+
+}

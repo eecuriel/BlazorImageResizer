@@ -1,0 +1,12 @@
+C:\Users\eduar\Documents\Cursos\ImageResizer\Shared\bin\Debug\net5.0\ImageResizer.Shared.deps.json
+C:\Users\eduar\Documents\Cursos\ImageResizer\Shared\bin\Debug\net5.0\ImageResizer.Shared.dll
+C:\Users\eduar\Documents\Cursos\ImageResizer\Shared\bin\Debug\net5.0\ref\ImageResizer.Shared.dll
+C:\Users\eduar\Documents\Cursos\ImageResizer\Shared\bin\Debug\net5.0\ImageResizer.Shared.pdb
+C:\Users\eduar\Documents\Cursos\ImageResizer\Shared\obj\Debug\net5.0\ImageResizer.Shared.csprojAssemblyReference.cache
+C:\Users\eduar\Documents\Cursos\ImageResizer\Shared\obj\Debug\net5.0\ImageResizer.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\eduar\Documents\Cursos\ImageResizer\Shared\obj\Debug\net5.0\ImageResizer.Shared.AssemblyInfoInputs.cache
+C:\Users\eduar\Documents\Cursos\ImageResizer\Shared\obj\Debug\net5.0\ImageResizer.Shared.AssemblyInfo.cs
+C:\Users\eduar\Documents\Cursos\ImageResizer\Shared\obj\Debug\net5.0\ImageResizer.Shared.csproj.CoreCompileInputs.cache
+C:\Users\eduar\Documents\Cursos\ImageResizer\Shared\obj\Debug\net5.0\ImageResizer.Shared.dll
+C:\Users\eduar\Documents\Cursos\ImageResizer\Shared\obj\Debug\net5.0\ref\ImageResizer.Shared.dll
+C:\Users\eduar\Documents\Cursos\ImageResizer\Shared\obj\Debug\net5.0\ImageResizer.Shared.pdb
